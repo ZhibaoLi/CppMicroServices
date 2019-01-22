@@ -15,10 +15,16 @@ include_directories(
 set(_gtest_tests 
   AnyMapTest.cpp
   BundleVersionTest.cpp
+  GlobalServiceTrackerTest.cpp
   LDAPExprTest.cpp
   LDAPFilterTest.cpp
+  OpenFileHandleTest.cpp
   UtilsTest.cpp
   FrameworkTest.cpp
+  BundleObjFileTest.cpp
+  ServiceExceptionTest.cpp
+  ServiceObjectsTest.cpp
+  ServiceReferenceTest.cpp
 )
 
 set(_additional_srcs

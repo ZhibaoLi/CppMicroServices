@@ -20,23 +20,24 @@
 
 =============================================================================*/
 
-#ifndef CPPMICROSERVICES_CHRONO_H
-#define CPPMICROSERVICES_CHRONO_H
+#include "cppmicroservices/util/BundleObjFile.h"
 
-#include <chrono>
+#include <cstring>
+#include <utility>
 
 namespace cppmicroservices {
 
-namespace detail {
-
-#if !defined(__clang__) && __GNUC__ == 4 && __GNUC_MINOR__ < 7
-typedef std::chrono::monotonic_clock Clock;
-#else
-typedef std::chrono::steady_clock Clock;
-#endif
-
+InvalidObjFileException::InvalidObjFileException(std::string  what,
+                                                 int errorNumber)
+  : m_What(std::move(what))
+{
+  if (errorNumber) {
+    m_What += std::string(": ") + strerror(errorNumber);
+  }
 }
 
+const char* InvalidObjFileException::what() const noexcept
+{
+  return m_What.c_str();
 }
-
-#endif // CPPMICROSERVICES_CHRONO_H
+}

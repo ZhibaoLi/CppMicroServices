@@ -20,18 +20,17 @@
 
 =============================================================================*/
 
-
 #ifndef CPPMICROSERVICES_BUNDLE_H
 #define CPPMICROSERVICES_BUNDLE_H
 
-#include "cppmicroservices/GlobalConfig.h"
 #include "cppmicroservices/AnyMap.h"
 #include "cppmicroservices/BundleVersion.h"
-#include "cppmicroservices/detail/Chrono.h"
+#include "cppmicroservices/GlobalConfig.h"
 
-#include <memory>
 #include <map>
+#include <memory>
 #include <vector>
+#include <chrono>
 
 namespace cppmicroservices {
 
@@ -44,7 +43,7 @@ class BundlePrivate;
 template<class S>
 class ServiceReference;
 
-typedef ServiceReference<void> ServiceReferenceU;
+using ServiceReferenceU = ServiceReference<void>;
 
 /**
 \defgroup gr_bundle Bundle
@@ -99,13 +98,13 @@ class US_Framework_EXPORT Bundle
 {
 
 public:
-
-  typedef detail::Clock::time_point TimeStamp;
+  using TimeStamp = std::chrono::steady_clock::time_point;
 
   /**
    * The bundle state.
    */
-  enum State : uint32_t {
+  enum State : uint32_t
+  {
 
     /**
      * The bundle is uninstalled and may not be used.
@@ -190,7 +189,8 @@ public:
     STATE_ACTIVE = 0x00000020
   };
 
-  enum StartOptions : uint32_t {
+  enum StartOptions : uint32_t
+  {
 
     /**
      * The bundle start operation is transient and the persistent autostart
@@ -222,7 +222,8 @@ public:
     START_ACTIVATION_POLICY = 0x00000002
   };
 
-  enum StopOptions : uint32_t {
+  enum StopOptions : uint32_t
+  {
 
     /**
      * The bundle stop is transient and the persistent autostart setting of the
@@ -239,10 +240,10 @@ public:
     STOP_TRANSIENT = 0x00000001
   };
 
-  Bundle(const Bundle &); // = default
-  Bundle(Bundle&&); // = default
+  Bundle(const Bundle&);            // = default
+  Bundle(Bundle&&);                 // = default
   Bundle& operator=(const Bundle&); // = default
-  Bundle& operator=(Bundle&&); // = default
+  Bundle& operator=(Bundle&&);      // = default
 
   /**
    * Constructs an invalid %Bundle object.
@@ -405,7 +406,7 @@ public:
    *    :any:`concept-bundle-properties`
    * \endrststar
    */
-  std::map<std::string, Any> GetProperties() const;
+  US_DEPRECATED std::map<std::string, Any> GetProperties() const;
 
   /**
    * Returns this bundle's Manifest headers and values.
@@ -541,7 +542,9 @@ public:
    *
    * @throws std::logic_error If this bundle has been uninstalled.
    */
-  std::vector<BundleResource> FindResources(const std::string& path, const std::string& filePattern, bool recurse) const;
+  std::vector<BundleResource> FindResources(const std::string& path,
+                                            const std::string& filePattern,
+                                            bool recurse) const;
 
   /**
    * Returns the time when this bundle was last modified. A bundle is
@@ -761,7 +764,6 @@ public:
   void Uninstall();
 
 protected:
-
   Bundle(const std::shared_ptr<BundlePrivate>& d);
 
   std::shared_ptr<BundlePrivate> d;
@@ -770,7 +772,6 @@ protected:
   friend class BundleRegistry;
   friend Bundle MakeBundle(const std::shared_ptr<BundlePrivate>&);
   friend std::shared_ptr<BundlePrivate> GetPrivate(const Bundle&);
-
 };
 
 /**
@@ -779,22 +780,24 @@ protected:
  *
  * Streams a textual representation of ``bundle`` into the stream ``os``.
  */
-US_Framework_EXPORT std::ostream& operator<<(std::ostream& os, const Bundle& bundle);
+US_Framework_EXPORT std::ostream& operator<<(std::ostream& os,
+                                             const Bundle& bundle);
 /**
  * \ingroup MicroServices
  * \ingroup gr_bundle
  *
  * This is the same as calling ``os << *bundle``.
  */
-US_Framework_EXPORT std::ostream& operator<<(std::ostream& os, Bundle const * bundle);
+US_Framework_EXPORT std::ostream& operator<<(std::ostream& os,
+                                             Bundle const* bundle);
 /**
  * \ingroup MicroServices
  * \ingroup gr_bundle
  *
  * Streams a textual representation of the bundle state enumeration.
  */
-US_Framework_EXPORT std::ostream& operator<<(std::ostream& os, Bundle::State state);
-
+US_Framework_EXPORT std::ostream& operator<<(std::ostream& os,
+                                             Bundle::State state);
 }
 
 #endif // CPPMICROSERVICES_BUNDLE_H
